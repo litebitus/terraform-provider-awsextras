@@ -1,0 +1,52 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".github/**"
+      - ".gitignore"
+      - ".goreleaser.yml"
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".github/**"
+      - ".gitignore"
+      - ".goreleaser.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  mirror-images:
+    uses: ./.github/workflows/mirror-images.yml
+    permissions:
+      contents: read
+      packages: write
+
+  test:
+    needs: mirror-images
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Set up Go
+        uses: actions/setup-go@v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v4.0.1
+        with:
+          terraform_version: 1.17.1
+          terraform_wrapper: false
+
+      - name: Test
+        run: make test
+
+      - name: Acceptance test
+        run: make test-acceptance
