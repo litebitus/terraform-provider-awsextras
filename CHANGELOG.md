@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## v0.1.0 — 2026-11-23
+
 - Resources
   - `awsextras_lb_listener_rule_priority`: a free priority for a load balancer listener rule, allocated from a range once and kept, so that a rule needs no hand-picked number.
 - Provider
