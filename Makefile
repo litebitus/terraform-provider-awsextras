@@ -1,7 +1,6 @@
-.PHONY: build docs install mirrored-images snapshot test test-acceptance
+.PHONY: build docs install snapshot test test-acceptance
 
-MOTO_SOURCE_IMAGE = docker.io/motoserver/moto:5.2.5
-MOTO_IMAGE = ghcr.io/litebitus/motoserver/moto:5.2.5
+MOTO_IMAGE = ghcr.io/litebitus/motoserver/moto:5.2.6
 MOTO_CONTAINER = awsextras-acceptance-moto
 
 build: test
@@ -35,9 +34,6 @@ test:
 		printf '\033[31m%s\033[0m\n' "tfplugindocs validate: failed, the Registry pages do not match the provider"; \
 		exit 1; \
 	fi
-
-mirrored-images:
-	@echo "$(MOTO_SOURCE_IMAGE) $(MOTO_IMAGE)"
 
 test-acceptance:
 	@docker run -d --rm --name $(MOTO_CONTAINER) -p 127.0.0.1::5000 $(MOTO_IMAGE) >/dev/null
